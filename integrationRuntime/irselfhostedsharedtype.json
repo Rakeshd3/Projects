@@ -1,0 +1,12 @@
+{
+	"name": "irselfhostedsharedtype",
+	"properties": {
+		"type": "SelfHosted",
+		"typeProperties": {
+			"linkedInfo": {
+				"resourceId": "/subscriptions/f730d9e2-0fc6-4ba6-a081-b5b7a256cceb/resourcegroups/testenv/providers/Microsoft.DataFactory/factories/adfrakeshd4/integrationruntimes/IRselfhosted2",
+				"authorizationType": "Rbac"
+			}
+		}
+	}
+}

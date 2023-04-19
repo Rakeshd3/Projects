@@ -1,0 +1,73 @@
+{
+	"name": "train_merged",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Train"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "part-00000-c6cc1cbe-cd26-4212-963e-4eb56c743e2e-c000.csv",
+				"folderPath": "output",
+				"container": "train"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "journey_id",
+				"type": "String"
+			},
+			{
+				"name": "train_id",
+				"type": "String"
+			},
+			{
+				"name": "route_id",
+				"type": "String"
+			},
+			{
+				"name": "ticket_id",
+				"type": "String"
+			},
+			{
+				"name": "date",
+				"type": "String"
+			},
+			{
+				"name": "ticket_price",
+				"type": "String"
+			},
+			{
+				"name": "tikcet_class",
+				"type": "String"
+			},
+			{
+				"name": "route_name",
+				"type": "String"
+			},
+			{
+				"name": "root_from_city",
+				"type": "String"
+			},
+			{
+				"name": "route_to_city",
+				"type": "String"
+			},
+			{
+				"name": "route_distance",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

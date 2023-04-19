@@ -1,0 +1,9 @@
+{
+	"name": "ADFRakeshd3",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "86918f92-139a-4fbd-8b28-20a3644137cc",
+		"tenantId": "258ce6fd-8198-4fd8-a914-924b6072ca8d"
+	}
+}

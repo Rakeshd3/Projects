@@ -1,0 +1,89 @@
+{
+	"name": "pipeline2",
+	"properties": {
+		"activities": [
+			{
+				"name": "merge_datasets_using_powerquery",
+				"type": "ExecuteWranglingDataflow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "merge_datasets_using_powerquery",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"UserQueryOutputDynamic": {
+								"Container": {
+									"value": "@pipeline().parameters.container",
+									"type": "Expression"
+								},
+								"Folder": {
+									"value": "@pipeline().parameters.folder",
+									"type": "Expression"
+								},
+								"Output": {
+									"value": "@pipeline().parameters.filename",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"queries": [
+						{
+							"queryName": "UserQuery",
+							"dataflowSinks": [
+								{
+									"name": "UserQueryOutputDynamic",
+									"dataset": {
+										"referenceName": "OutputDynamic",
+										"type": "DatasetReference",
+										"parameters": {
+											"Container": {
+												"value": "@pipeline().parameters.container",
+												"type": "Expression"
+											},
+											"Folder": {
+												"value": "@pipeline().parameters.folder",
+												"type": "Expression"
+											},
+											"Output": {
+												"value": "@pipeline().parameters.filename",
+												"type": "Expression"
+											}
+										}
+									},
+									"script": "sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> UserQueryOutputDynamic"
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"container": {
+				"type": "string"
+			},
+			"folder": {
+				"type": "string"
+			},
+			"filename": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2023-04-19T08:17:18Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

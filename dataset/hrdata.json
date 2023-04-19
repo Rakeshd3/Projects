@@ -1,0 +1,93 @@
+{
+	"name": "hrdata",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "HR"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "hr_department.csv",
+				"folderPath": "hr",
+				"container": "csv"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Employee_ID",
+				"type": "String"
+			},
+			{
+				"name": "Gender",
+				"type": "String"
+			},
+			{
+				"name": "Age",
+				"type": "String"
+			},
+			{
+				"name": "Education_Level",
+				"type": "String"
+			},
+			{
+				"name": "Relationship_Status",
+				"type": "String"
+			},
+			{
+				"name": "Hometown",
+				"type": "String"
+			},
+			{
+				"name": "Unit",
+				"type": "String"
+			},
+			{
+				"name": "Decision_skill_possess",
+				"type": "String"
+			},
+			{
+				"name": "Time_of_service",
+				"type": "String"
+			},
+			{
+				"name": "Time_since_promotion",
+				"type": "String"
+			},
+			{
+				"name": "growth_rate",
+				"type": "String"
+			},
+			{
+				"name": "Travel_Rate",
+				"type": "String"
+			},
+			{
+				"name": "Post_Level",
+				"type": "String"
+			},
+			{
+				"name": "Pay_Scale",
+				"type": "String"
+			},
+			{
+				"name": "Compensation_and_Benefits",
+				"type": "String"
+			},
+			{
+				"name": "Work_Life_balance",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

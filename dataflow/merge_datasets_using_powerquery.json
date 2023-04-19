@@ -1,0 +1,36 @@
+{
+	"name": "merge_datasets_using_powerquery",
+	"properties": {
+		"type": "WranglingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "Journey",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Journey",
+					"dataset": {
+						"referenceName": "Journey",
+						"type": "DatasetReference"
+					}
+				},
+				{
+					"name": "Tickets",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> Tickets",
+					"dataset": {
+						"referenceName": "Tickets",
+						"type": "DatasetReference"
+					}
+				},
+				{
+					"name": "route",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> route",
+					"dataset": {
+						"referenceName": "route",
+						"type": "DatasetReference"
+					}
+				}
+			],
+			"script": "section Section1;\r\nshared Journey = let AdfDoc = AzureStorage.BlobContents(\"https://rakeshd3data.blob.core.windows.net/train/train datasets/journey.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]) in  PromotedHeaders;\r\nshared Tickets = let AdfDoc = AzureStorage.BlobContents(\"https://rakeshd3data.blob.core.windows.net/train/train datasets/tickets.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]) in  PromotedHeaders;\r\nshared route = let AdfDoc = AzureStorage.BlobContents(\"https://rakeshd3data.blob.core.windows.net/train/train datasets/route.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]) in  PromotedHeaders;\r\nshared UserQuery = let Source = #\"Journey\",\r\n  #\"Merged queries\" = Table.NestedJoin(Source, {\"id\"}, Tickets, {\"journey_id\"}, \"Tickets\", JoinKind.LeftOuter),\r\n  #\"Expanded Tickets\" = Table.ExpandTableColumn(#\"Merged queries\", \"Tickets\", {\"id\", \"price\", \"class\", \"journey_id\"}, {\"Tickets.id\", \"Tickets.price\", \"Tickets.class\", \"Tickets.journey_id\"}),\r\n  #\"Merged queries 1\" = Table.NestedJoin(#\"Expanded Tickets\", {\"route_id\"}, route, {\"id\"}, \"route\", JoinKind.LeftOuter),\r\n  #\"Expanded route\" = Table.ExpandTableColumn(#\"Merged queries 1\", \"route\", {\"id\", \"name\", \"from_city\", \"to_city\", \"distance\"}, {\"route.id\", \"route.name\", \"route.from_city\", \"route.to_city\", \"route.distance\"}),\r\n  #\"Renamed columns\" = Table.RenameColumns(#\"Expanded route\", {{\"Tickets.id\", \"ticket_id\"}, {\"Tickets.price\", \"ticket_price\"}, {\"Tickets.class\", \"tikcet_class\"}}),\r\n  #\"Removed columns\" = Table.RemoveColumns(#\"Renamed columns\", {\"Tickets.journey_id\", \"route.id\"}),\r\n  #\"Renamed columns 1\" = Table.RenameColumns(#\"Removed columns\", {{\"route.name\", \"route_name\"}, {\"route.from_city\", \"root_from_city\"}, {\"route.to_city\", \"route_to_city\"}, {\"route.distance\", \"route_distance\"}}),\r\n  #\"Reordered columns\" = Table.ReorderColumns(#\"Renamed columns 1\", {\"id\", \"train_id\", \"route_id\", \"ticket_id\", \"date\", \"ticket_price\", \"tikcet_class\", \"route_name\", \"root_from_city\", \"route_to_city\", \"route_distance\"}),\r\n  #\"Renamed columns 2\" = Table.RenameColumns(#\"Reordered columns\", {{\"id\", \"journey_id\"}}),\r\n  #\"Changed column type\" = Table.TransformColumnTypes(#\"Renamed columns 2\", {{\"ticket_price\", Currency.Type}, {\"route_distance\", Int64.Type}}) in #\"Changed column type\";\r\n",
+			"documentLocale": "en-us"
+		}
+	}
+}

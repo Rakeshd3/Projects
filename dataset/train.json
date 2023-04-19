@@ -1,0 +1,51 @@
+{
+	"name": "train",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureBlobStorage1",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "Train"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Sheet1",
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "train.xlsx",
+				"folderPath": "train datasets",
+				"container": "train"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "id",
+				"type": "String"
+			},
+			{
+				"name": "model",
+				"type": "String"
+			},
+			{
+				"name": "max_speed",
+				"type": "String"
+			},
+			{
+				"name": "production_year",
+				"type": "String"
+			},
+			{
+				"name": "first_class_places",
+				"type": "String"
+			},
+			{
+				"name": "second_class_places",
+				"type": "String"
+			}
+		]
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

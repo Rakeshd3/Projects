@@ -1,0 +1,126 @@
+{
+	"name": "conditionalsplit_windowstransformation",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "hrdata",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "hrdata",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				},
+				{
+					"dataset": {
+						"referenceName": "hrdata",
+						"type": "DatasetReference"
+					},
+					"name": "sink2"
+				}
+			],
+			"transformations": [
+				{
+					"name": "split1"
+				},
+				{
+					"name": "window1"
+				},
+				{
+					"name": "window2"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          Employee_ID as string,",
+				"          Gender as string,",
+				"          Age as string,",
+				"          Education_Level as string,",
+				"          Relationship_Status as string,",
+				"          Hometown as string,",
+				"          Unit as string,",
+				"          Decision_skill_possess as string,",
+				"          Time_of_service as string,",
+				"          Time_since_promotion as string,",
+				"          growth_rate as string,",
+				"          Travel_Rate as string,",
+				"          Post_Level as string,",
+				"          Pay_Scale as string,",
+				"          Compensation_and_Benefits as string,",
+				"          Work_Life_balance as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 split(equals(Gender,\"F\"),",
+				"     equals(Gender,\"M\"),",
+				"     disjoint: false) ~> split1@(Female, Male)",
+				"split1@Female window(over(Unit),",
+				"     desc(growth_rate, true),",
+				"     Ranking = denseRank()) ~> window1",
+				"split1@Male window(over(Unit),",
+				"     desc(growth_rate, true),",
+				"     Ranking = denseRank()) ~> window2",
+				"window1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Employee_ID as string,",
+				"          Gender as string,",
+				"          Age as string,",
+				"          Education_Level as string,",
+				"          Relationship_Status as string,",
+				"          Hometown as string,",
+				"          Unit as string,",
+				"          Decision_skill_possess as string,",
+				"          Time_of_service as string,",
+				"          Time_since_promotion as string,",
+				"          growth_rate as string,",
+				"          Travel_Rate as string,",
+				"          Post_Level as string,",
+				"          Pay_Scale as string,",
+				"          Compensation_and_Benefits as string,",
+				"          Work_Life_balance as string",
+				"     ),",
+				"     partitionFileNames:['part1.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 1,",
+				"     partitionBy('hash', 1)) ~> sink1",
+				"window2 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Employee_ID as string,",
+				"          Gender as string,",
+				"          Age as string,",
+				"          Education_Level as string,",
+				"          Relationship_Status as string,",
+				"          Hometown as string,",
+				"          Unit as string,",
+				"          Decision_skill_possess as string,",
+				"          Time_of_service as string,",
+				"          Time_since_promotion as string,",
+				"          growth_rate as string,",
+				"          Travel_Rate as string,",
+				"          Post_Level as string,",
+				"          Pay_Scale as string,",
+				"          Compensation_and_Benefits as string,",
+				"          Work_Life_balance as string",
+				"     ),",
+				"     partitionFileNames:['part2.csv'],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     saveOrder: 2,",
+				"     partitionBy('hash', 1)) ~> sink2"
+			]
+		}
+	}
+}

@@ -1,0 +1,20 @@
+{
+	"name": "Data type change",
+	"properties": {
+		"type": "WranglingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"name": "hrdata",
+					"script": "source(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tignoreNoFilesFound: false) ~> hrdata",
+					"dataset": {
+						"referenceName": "hrdata",
+						"type": "DatasetReference"
+					}
+				}
+			],
+			"script": "section Section1;\r\nshared hrdata = let AdfDoc = AzureStorage.BlobContents(\"https://rakeshd3data.blob.core.windows.net/csv/hr/hr_department.csv\"),Csv = Csv.Document(AdfDoc, [Delimiter = \",\", Encoding = TextEncoding.Utf8, QuoteStyle = QuoteStyle.Csv]), PromotedHeaders = Table.PromoteHeaders(Csv, [PromoteAllScalars = true]) in  PromotedHeaders;\r\nshared UserQuery = let Source = #\"hrdata\" in Source;\r\n",
+			"documentLocale": "en-us"
+		}
+	}
+}
